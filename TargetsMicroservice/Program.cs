@@ -1,15 +1,25 @@
+using Microsoft.EntityFrameworkCore;
+using TargetsMicroservice;
+using TargetsMicroservice.Repositories.Implementations;
+using TargetsMicroservice.Repositories.Interfaces;
+using TargetsMicroservice.Services.Implementations;
+using TargetsMicroservice.Services.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDbContext<MagisterkaContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("PgSQL")));
+
+builder.Services.AddScoped<IFlightRepository, FlightRepository>();
+builder.Services.AddScoped<IFlightService, FlightService>();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
