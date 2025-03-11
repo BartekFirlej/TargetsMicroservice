@@ -7,9 +7,9 @@ namespace TargetsMicroservice.Controllers
     [Route("flights")]
     public class FlightsController : ControllerBase
     {
-        private readonly IFlightService _flightService;
+        private readonly IFlightsService _flightService;
 
-        public FlightsController(IFlightService flightService)
+        public FlightsController(IFlightsService flightService)
         {
             _flightService = flightService;
         }
