@@ -1,4 +1,5 @@
 ﻿using TargetsMicroservice.Models;
+using TargetsMicroservice.Requests;
 
 namespace TargetsMicroservice.Repositories.Interfaces
 {
@@ -6,5 +7,6 @@ namespace TargetsMicroservice.Repositories.Interfaces
     {
         public Task<List<Flight>> GetFlights();
         public Task<Flight> GetFlightById(long flightID);
+        public Task<Flight> CreateFlight(FlightBeginRequest request);
     }
 }

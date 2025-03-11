@@ -1,16 +1,22 @@
 ﻿using TargetsMicroservice.Models;
 using TargetsMicroservice.Repositories.Interfaces;
+using TargetsMicroservice.Requests;
 using TargetsMicroservice.Services.Interfaces;
 
 namespace TargetsMicroservice.Services.Implementations
 {
-    public class FlightService : IFlightService
+    public class FlightsService : IFlightsService
     {
         private readonly IFlightRepository _flightRepository;
 
-        public FlightService(IFlightRepository flightRepository)
+        public FlightsService(IFlightRepository flightRepository)
         {
             _flightRepository = flightRepository;
+        }
+
+        public async Task<Flight> CreateFlight(FlightBeginRequest request)
+        {
+            return await _flightRepository.CreateFlight(request);
         }
 
         public async Task<Flight> GetFlightById(long flightID)
