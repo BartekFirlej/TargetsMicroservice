@@ -42,5 +42,12 @@ namespace TargetsMicroservice.Repositories.Implementations
         {
             return await _dbContext.Flights.ToListAsync();
         }
+
+        public async Task<Flight> EndFlight(Flight flight, DateTime flightEndTime)
+        {
+            flight.Endtime = flightEndTime;
+            await _dbContext.SaveChangesAsync();
+            return flight;
+        }
     }
 }

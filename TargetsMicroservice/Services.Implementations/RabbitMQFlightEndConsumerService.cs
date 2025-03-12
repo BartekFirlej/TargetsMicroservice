@@ -8,16 +8,16 @@ using TargetsMicroservice.Services.Interfaces;
 
 namespace TargetsMicroservice.Services.Implementations
 {
-    public class RabbitMQFlightBeginConsumerService : BackgroundService
+    public class RabbitMQFlightEndConsumerService : BackgroundService
     {
         private readonly IChannel _channel;
-        private readonly string _FLIGHTS_FLIGHT_BEGIN_QUEUE;
+        private readonly string _FLIGHTS_FLIGHT_END_QUEUE;
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public RabbitMQFlightBeginConsumerService(IChannel channel, string FLIGHTS_FLIGHT_BEGIN_QUEUE, IServiceScopeFactory serviceScopeFactory)
+        public RabbitMQFlightEndConsumerService(IChannel channel, string FLIGHTS_FLIGHT_END_QUEUE, IServiceScopeFactory serviceScopeFactory)
         {
             _channel = channel;
-            _FLIGHTS_FLIGHT_BEGIN_QUEUE = FLIGHTS_FLIGHT_BEGIN_QUEUE;
+            _FLIGHTS_FLIGHT_END_QUEUE = FLIGHTS_FLIGHT_END_QUEUE;
             _serviceScopeFactory = serviceScopeFactory;
         }
 
@@ -33,19 +33,19 @@ namespace TargetsMicroservice.Services.Implementations
                         var _flightsService = scope.ServiceProvider.GetRequiredService<IFlightsService>();
                         var body = ea.Body.ToArray();
                         var message = Encoding.UTF8.GetString(body);
-                        Console.WriteLine($"Queue {_FLIGHTS_FLIGHT_BEGIN_QUEUE}: {message}");
-                        FlightBeginRequest flightRequest = JsonSerializer.Deserialize<FlightBeginRequest>(message);
-                        await _flightsService.CreateFlight(flightRequest);
+                        Console.WriteLine($"Queue {_FLIGHTS_FLIGHT_END_QUEUE}: {message}");
+                        FlightEndRequest flightRequest = JsonSerializer.Deserialize<FlightEndRequest>(message);
+                        await _flightsService.EndFlight(flightRequest);
                         await Task.Delay(100);
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"Error processing message from {_FLIGHTS_FLIGHT_BEGIN_QUEUE}: {ex}");
+                        Console.WriteLine($"Error processing message from {_FLIGHTS_FLIGHT_END_QUEUE}: {ex}");
                     }
                 }
             };
 
-            await _channel.BasicConsumeAsync(queue: _FLIGHTS_FLIGHT_BEGIN_QUEUE,
+            await _channel.BasicConsumeAsync(queue: _FLIGHTS_FLIGHT_END_QUEUE,
                                              autoAck: true,
                                              consumer: consumer);
 

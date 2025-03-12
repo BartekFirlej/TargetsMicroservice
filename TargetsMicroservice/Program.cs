@@ -38,6 +38,13 @@ builder.Services.AddHostedService<RabbitMQFlightBeginConsumerService>(sp =>
     return new RabbitMQFlightBeginConsumerService(channel, TARGETS_FLIGHT_BEGIN_QUEUE, serviceScopeFactory);
 });
 
+builder.Services.AddHostedService<RabbitMQFlightEndConsumerService>(sp =>
+{
+    var serviceScopeFactory = sp.GetRequiredService<IServiceScopeFactory>();
+    return new RabbitMQFlightEndConsumerService(channel, TARGETS_FLIGHT_END_QUEUE, serviceScopeFactory);
+});
+
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
