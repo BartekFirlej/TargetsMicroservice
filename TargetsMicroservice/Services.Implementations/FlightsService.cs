@@ -19,6 +19,14 @@ namespace TargetsMicroservice.Services.Implementations
             return await _flightRepository.CreateFlight(request);
         }
 
+        public async Task<Flight> EndFlight(FlightEndRequest request)
+        {
+            var flight = GetFlightById(request.FlightID);
+            if (flight == null) 
+                return null;
+            return await _flightRepository.EndFlight(flight.Result, request.EndTime);
+        }
+
         public async Task<Flight> GetFlightById(long flightID)
         {
             return await _flightRepository.GetFlightById(flightID);
