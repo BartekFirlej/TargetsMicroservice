@@ -3,6 +3,7 @@ using NetTopologySuite.Geometries;
 using TargetsMicroservice.Models;
 using TargetsMicroservice.Repositories.Interfaces;
 using TargetsMicroservice.Requests;
+using TargetsMicroservice.Responses;
 
 namespace TargetsMicroservice.Repositories.Implementations
 {
@@ -15,7 +16,7 @@ namespace TargetsMicroservice.Repositories.Implementations
             _dbContext = dbContext;
         }
 
-        public async Task<Target> AddTarget(TargetRequest target)
+        public async Task<Target> AddTarget(TargetDatabaseRequest target)
         {
             var targetToAdd = new Target
             {

@@ -1,5 +1,6 @@
 ﻿using TargetsMicroservice.Repositories.Interfaces;
 using TargetsMicroservice.Requests;
+using TargetsMicroservice.Responses;
 using TargetsMicroservice.Services.Interfaces;
 
 namespace TargetsMicroservice.Services.Implementations
@@ -8,21 +9,36 @@ namespace TargetsMicroservice.Services.Implementations
     {
         private readonly ITargetsRepository _targetsRepository;
         private readonly IPhotoUploadService _photoUploadService;
+        private readonly ITargetTypesService _targetTypesService;
 
-        public TargetsService(ITargetsRepository targetsRepository, IPhotoUploadService photoUploadService)
+        public TargetsService(ITargetsRepository targetsRepository, IPhotoUploadService photoUploadService, ITargetTypesService targetTypesService)
         {
             _targetsRepository = targetsRepository;
             _photoUploadService = photoUploadService;
+            _targetTypesService = targetTypesService;
         }
 
         public async Task<TargetResponse> AddTarget(TargetRequest target)
         {
+            string imageLink ="";
             if (target.Image != null)
             {
-                var image = Convert.FromBase64String(target.Image);
-                target.Image = await _photoUploadService.UploadPhoto(image, target.Targetid, target.Detectiontime);
+                imageLink = await _photoUploadService.UploadPhoto(target.Image, target.ObjectId, target.Timestamp);
             }
-            var addedTarget = await _targetsRepository.AddTarget(target);
+            var targetType = await _targetTypesService.GetTargetTypeByName(target.ObjectCategory);
+            var targetDBRequest = new TargetDatabaseRequest
+            {
+                Flightid = target.FlightId,
+                Comment = target.Comment,
+                Detectiontime = target.Timestamp,
+                Image = target.Image != null ? imageLink : null,
+                Targetid = target.ObjectId,
+                Targettypeid = targetType.Targettypeid,
+                X = target.X,
+                Y = target.Y,
+                Z = target.Z
+            };
+            var addedTarget = await _targetsRepository.AddTarget(targetDBRequest);
             return await GetTargetById(addedTarget.Targetid);
         }
 

@@ -1,4 +1,5 @@
 ﻿using TargetsMicroservice.Requests;
+using TargetsMicroservice.Responses;
 
 namespace TargetsMicroservice.Services.Interfaces
 {

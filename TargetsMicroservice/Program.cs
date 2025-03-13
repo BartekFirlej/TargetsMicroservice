@@ -42,6 +42,8 @@ builder.Services.AddSingleton<IMinioClient>(serviceProvider =>
 
 builder.Services.AddScoped<IFlightsRepository, FlightsRepository>();
 builder.Services.AddScoped<IFlightsService, FlightsService>();
+builder.Services.AddScoped<ITargetTypesRepository, TargetTypeRepository>();
+builder.Services.AddScoped<ITargetTypesService, TargetTypeService>();
 builder.Services.AddScoped<ITargetsRepository, TargetsRepository>();
 builder.Services.AddScoped<ITargetsService, TargetsService>();
 builder.Services.AddScoped<IPhotoUploadService>(sp =>
@@ -59,7 +61,11 @@ builder.Services.AddHostedService<RabbitMQFlightEndConsumerService>(sp =>
     var serviceScopeFactory = sp.GetRequiredService<IServiceScopeFactory>();
     return new RabbitMQFlightEndConsumerService(channel, TARGETS_FLIGHT_END_QUEUE, serviceScopeFactory);
 });
-
+builder.Services.AddHostedService<RabbitMQTargetConsumerService>(sp =>
+{
+    var serviceScopeFactory = sp.GetRequiredService<IServiceScopeFactory>();
+    return new RabbitMQTargetConsumerService(channel, TARGETS_TARGETS_QUEUE, serviceScopeFactory);
+});
 
 var app = builder.Build();
 

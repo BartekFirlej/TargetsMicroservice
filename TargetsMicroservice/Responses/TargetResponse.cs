@@ -1,4 +1,4 @@
-﻿namespace TargetsMicroservice
+﻿namespace TargetsMicroservice.Responses
 {
     public class TargetResponse
     {
