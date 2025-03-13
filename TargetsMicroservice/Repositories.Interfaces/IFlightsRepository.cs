@@ -3,7 +3,7 @@ using TargetsMicroservice.Requests;
 
 namespace TargetsMicroservice.Repositories.Interfaces
 {
-    public interface IFlightRepository
+    public interface IFlightsRepository
     {
         public Task<List<Flight>> GetFlights();
         public Task<Flight> GetFlightById(long flightID);

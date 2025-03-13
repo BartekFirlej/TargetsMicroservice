@@ -6,11 +6,11 @@ using TargetsMicroservice.Requests;
 
 namespace TargetsMicroservice.Repositories.Implementations
 {
-    public class FlightRepository : IFlightRepository
+    public class FlightsRepository : IFlightsRepository
     {
         private readonly MagisterkaContext _dbContext;
 
-        public FlightRepository(MagisterkaContext dbContext)
+        public FlightsRepository(MagisterkaContext dbContext)
         {
             _dbContext = dbContext;
         }

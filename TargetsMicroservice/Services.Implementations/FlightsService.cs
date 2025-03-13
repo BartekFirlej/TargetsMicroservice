@@ -7,9 +7,9 @@ namespace TargetsMicroservice.Services.Implementations
 {
     public class FlightsService : IFlightsService
     {
-        private readonly IFlightRepository _flightRepository;
+        private readonly IFlightsRepository _flightRepository;
 
-        public FlightsService(IFlightRepository flightRepository)
+        public FlightsService(IFlightsRepository flightRepository)
         {
             _flightRepository = flightRepository;
         }
