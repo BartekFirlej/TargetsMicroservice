@@ -38,7 +38,7 @@ namespace TargetsMicroservice.Repositories.Implementations
 
         public async Task<TargetResponse> GetTargetById(long targetId)
         {
-            return await _dbContext.Targets.Select(t => new TargetResponse
+            return await _dbContext.Targets.Include(t => t.Targettype).Select(t => new TargetResponse
             {
                 Targetid = t.Targetid,
                 Targettypeid = t.Targettypeid,
@@ -48,13 +48,14 @@ namespace TargetsMicroservice.Repositories.Implementations
                 Y = (float)t.Location.Y,
                 Z = (float)t.Location.Z,
                 Comment = t.Comment,
-                Detectiontime = t.Detectiontime
+                Detectiontime = t.Detectiontime,
+                Targettypename = t.Targettype.Name
             }).Where(t => t.Targetid == targetId).FirstOrDefaultAsync();
         }
 
         public async Task<List<TargetResponse>> GetTargets()
         {
-            return await _dbContext.Targets.Select(t => new TargetResponse
+            return await _dbContext.Targets.Include(t => t.Targettype).Select(t => new TargetResponse
             {
                 Targetid = t.Targetid,
                 Targettypeid = t.Targettypeid,
@@ -64,7 +65,8 @@ namespace TargetsMicroservice.Repositories.Implementations
                 Y = (float)t.Location.Y,
                 Z = (float)t.Location.Z,
                 Comment = t.Comment,
-                Detectiontime = t.Detectiontime
+                Detectiontime = t.Detectiontime,
+                Targettypename = t.Targettype.Name
             }).ToListAsync();
         }
     }

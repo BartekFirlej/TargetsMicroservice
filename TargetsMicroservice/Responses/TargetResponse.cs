@@ -18,6 +18,8 @@
 
         public int Targettypeid { get; set; }
 
+        public string Targettypename { get; set; }
+
         public long Flightid { get; set; }
     }
 }
