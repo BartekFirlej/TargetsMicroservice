@@ -38,24 +38,36 @@ namespace TargetsMicroservice.Repositories.Implementations
 
         public async Task<TargetResponse> GetTargetById(long targetId)
         {
-            return await _dbContext.Targets.Include(t => t.Targettype).Select(t => new TargetResponse
-            {
-                Targetid = t.Targetid,
-                Targettypeid = t.Targettypeid,
-                Flightid = t.Flightid,
-                Imagelink = t.Imagelink,
-                X = (float)t.Location.X,
-                Y = (float)t.Location.Y,
-                Z = (float)t.Location.Z,
-                Comment = t.Comment,
-                Detectiontime = t.Detectiontime,
-                Targettypename = t.Targettype.Name
-            }).Where(t => t.Targetid == targetId).FirstOrDefaultAsync();
+            return await _dbContext.Targets
+                .Include(t => t.Targettype)
+                .Include(t => t.Flight.Operator.Team.Platoon)
+                .Select(t => new TargetResponse
+                {
+                    Targetid = t.Targetid,
+                    Targettypeid = t.Targettypeid,
+                    Flightid = t.Flightid,
+                    Imagelink = t.Imagelink,
+                    X = (float)t.Location.X,
+                    Y = (float)t.Location.Y,
+                    Z = (float)t.Location.Z,
+                    Comment = t.Comment,
+                    Detectiontime = t.Detectiontime,
+                    Targettypename = t.Targettype.Name,
+                    Operatorid = t.Flight.Operatorid,
+                    Operatorname = t.Flight.Operator.Name,
+                    Teamid = t.Flight.Operator.Teamid,
+                    Teamname = t.Flight.Operator.Team.Name,
+                    Platoonid = t.Flight.Operator.Team.Platoonid,
+                    Platoonname = t.Flight.Operator.Team.Platoon.Name
+                }).Where(t => t.Targetid == targetId).FirstOrDefaultAsync();
         }
 
         public async Task<List<TargetResponse>> GetTargets()
         {
-            return await _dbContext.Targets.Include(t => t.Targettype).Select(t => new TargetResponse
+            return await _dbContext.Targets
+                .Include(t => t.Targettype)
+                .Include(t => t.Flight.Operator.Team.Platoon)
+                .Select(t => new TargetResponse
             {
                 Targetid = t.Targetid,
                 Targettypeid = t.Targettypeid,
@@ -66,7 +78,13 @@ namespace TargetsMicroservice.Repositories.Implementations
                 Z = (float)t.Location.Z,
                 Comment = t.Comment,
                 Detectiontime = t.Detectiontime,
-                Targettypename = t.Targettype.Name
+                Targettypename = t.Targettype.Name,
+                Operatorid = t.Flight.Operatorid,
+                Operatorname = t.Flight.Operator.Name,
+                Teamid = t.Flight.Operator.Teamid,
+                Teamname = t.Flight.Operator.Team.Name,
+                Platoonid = t.Flight.Operator.Team.Platoonid,
+                Platoonname = t.Flight.Operator.Team.Platoon.Name
             }).ToListAsync();
         }
     }

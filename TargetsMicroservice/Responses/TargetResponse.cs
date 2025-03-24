@@ -21,5 +21,18 @@
         public string Targettypename { get; set; }
 
         public long Flightid { get; set; }
+
+        public int Operatorid { get; set; }
+
+        public string Operatorname { get; set; }
+
+        public int Teamid { get; set; }
+
+        public string Teamname { get; set; }
+
+        public int Platoonid { get; set; }
+
+        public string Platoonname { get; set; }
+
     }
 }
