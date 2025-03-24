@@ -6,11 +6,11 @@ namespace TargetsMicroservice.Controllers
 {
     [ApiController]
     [Route("targets")]
-    public class TargetController : ControllerBase
+    public class TargetsController : ControllerBase
     {
         private readonly ITargetsService _targetService;
 
-        public TargetController(ITargetsService targetService)
+        public TargetsController(ITargetsService targetService)
         {
             _targetService = targetService;
         }
