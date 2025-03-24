@@ -18,6 +18,8 @@ public partial class Flight
 
     public int Operatorid { get; set; }
 
+    public string? VideoStream { get; set; }
+
     public virtual Operator Operator { get; set; } = null!;
 
     public virtual ICollection<Target> Targets { get; set; } = new List<Target>();

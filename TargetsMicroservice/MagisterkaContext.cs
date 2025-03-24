@@ -70,6 +70,7 @@ public partial class MagisterkaContext : DbContext
             entity.Property(e => e.Comment).HasColumnName("comment");
             entity.Property(e => e.Endtime).HasColumnName("endtime");
             entity.Property(e => e.Operatorid).HasColumnName("operatorid");
+            entity.Property(e => e.VideoStream).HasColumnName("videostream");
 
             entity.HasOne(d => d.Operator).WithMany(p => p.Flights)
                 .HasForeignKey(d => d.Operatorid)
