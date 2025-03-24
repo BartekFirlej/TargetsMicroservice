@@ -56,6 +56,8 @@ builder.Services.AddScoped<ITargetTypesRepository, TargetTypeRepository>();
 builder.Services.AddScoped<ITargetTypesService, TargetTypeService>();
 builder.Services.AddScoped<ITargetsRepository, TargetsRepository>();
 builder.Services.AddScoped<ITargetsService, TargetsService>();
+builder.Services.AddScoped<ICrucialPlacesRepository, CrucialPlacesRepository>();
+builder.Services.AddScoped<ICrucialPlacesService, CrucialPlacesService>();
 builder.Services.AddScoped<IPhotoUploadService>(sp =>
 {
     var minio = sp.GetRequiredService<IMinioClient>();
