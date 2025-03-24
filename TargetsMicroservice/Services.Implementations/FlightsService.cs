@@ -1,6 +1,7 @@
 ﻿using TargetsMicroservice.Models;
 using TargetsMicroservice.Repositories.Interfaces;
 using TargetsMicroservice.Requests;
+using TargetsMicroservice.Responses;
 using TargetsMicroservice.Services.Interfaces;
 
 namespace TargetsMicroservice.Services.Implementations
@@ -27,14 +28,19 @@ namespace TargetsMicroservice.Services.Implementations
             return await _flightRepository.EndFlight(flight.Result, request.EndTime);
         }
 
+        public async Task<FlightResponse> GetFlightResponseById(long flightID)
+        {
+            return await _flightRepository.GetFlightResponseById(flightID);
+        }
+
+        public async Task<List<FlightResponse>> GetFlights()
+        {
+            return await _flightRepository.GetFlights();
+        }
+
         public async Task<Flight> GetFlightById(long flightID)
         {
             return await _flightRepository.GetFlightById(flightID);
-        }
-
-        public async Task<List<Flight>> GetFlights()
-        {
-            return await _flightRepository.GetFlights();
         }
     }
 }

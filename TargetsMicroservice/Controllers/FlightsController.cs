@@ -24,7 +24,7 @@ namespace TargetsMicroservice.Controllers
         [HttpGet("flightID")]
         public async Task<IActionResult> GetFlightByID(long flightID)
         {
-            var flight = await _flightService.GetFlightById(flightID);
+            var flight = await _flightService.GetFlightResponseById(flightID);
             return Ok(flight);
         }
     }

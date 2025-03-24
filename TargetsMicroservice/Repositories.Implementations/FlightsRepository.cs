@@ -3,6 +3,7 @@ using NetTopologySuite.Geometries;
 using TargetsMicroservice.Models;
 using TargetsMicroservice.Repositories.Interfaces;
 using TargetsMicroservice.Requests;
+using TargetsMicroservice.Responses;
 
 namespace TargetsMicroservice.Repositories.Implementations
 {
@@ -26,21 +27,44 @@ namespace TargetsMicroservice.Repositories.Implementations
                 },
                 Operatorid = request.OperatorID,
                 Flightid = request.FlightID,
-                Comment = request.Comment
+                Comment = request.Comment,
+                VideoStream = request.VideoStream
             };
             var addedFlight = await _dbContext.Flights.AddAsync(flight);
             await _dbContext.SaveChangesAsync();
             return addedFlight.Entity;
         }
 
-        public async Task<Flight> GetFlightById(long flightID)
+        public async Task<FlightResponse> GetFlightResponseById(long flightID)
         {
-            return await _dbContext.Flights.Where(f => f.Flightid == flightID).FirstOrDefaultAsync();
+            return await _dbContext.Flights.Where(f => f.Flightid == flightID).Select(f => new FlightResponse
+            {
+                Flightid = f.Flightid,
+                Begintime = f.Begintime,
+                Endtime = f.Endtime,
+                Comment = f.Comment,
+                Operatorid = f.Operatorid,
+                VideoStream = f.VideoStream,
+                X = (float)f.Beginpoint.X,
+                Y = (float)f.Beginpoint.Y,
+                Z = (float)f.Beginpoint.Z
+            }).FirstOrDefaultAsync();
         }
 
-        public async Task<List<Flight>> GetFlights()
+        public async Task<List<FlightResponse>> GetFlights()
         {
-            return await _dbContext.Flights.ToListAsync();
+            return await _dbContext.Flights.Select(f => new FlightResponse
+            {
+                Flightid = f.Flightid,
+                Begintime = f.Begintime,
+                Endtime = f.Endtime,
+                Comment = f.Comment,
+                Operatorid = f.Operatorid,
+                VideoStream = f.VideoStream,
+                X = (float)f.Beginpoint.X,
+                Y = (float)f.Beginpoint.Y,
+                Z = (float)f.Beginpoint.Z
+            }).ToListAsync();
         }
 
         public async Task<Flight> EndFlight(Flight flight, DateTime flightEndTime)
@@ -48,6 +72,11 @@ namespace TargetsMicroservice.Repositories.Implementations
             flight.Endtime = flightEndTime;
             await _dbContext.SaveChangesAsync();
             return flight;
+        }
+
+        public async Task<Flight> GetFlightById(long flightID)
+        {
+            return await _dbContext.Flights.Where(f => f.Flightid == flightID).FirstOrDefaultAsync();
         }
     }
 }
