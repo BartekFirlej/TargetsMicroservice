@@ -21,7 +21,7 @@ namespace TargetsMicroservice.Controllers
             var targets = await _targetService.GetTargets();
             return Ok(targets);
         }
-
+         
         /*[HttpPost]
         public async Task<IActionResult> PostTarget(TargetRequest request)
         {

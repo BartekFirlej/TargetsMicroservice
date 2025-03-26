@@ -9,20 +9,29 @@ using TargetsMicroservice.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+IConfiguration configuration = builder.Configuration;
+
 ConnectionFactory factory = new ConnectionFactory();
-factory.UserName = "guest";
-factory.Password = "guest";
-factory.HostName = "localhost";
-factory.ClientProvidedName = "app:audit component:event-consumer";
+factory.UserName = configuration["RabbitMQ:UserName"];
+factory.Password = configuration["RabbitMQ:Password"];
+factory.HostName = configuration["RabbitMQ:HostName"];
+factory.ClientProvidedName = configuration["RabbitMQ:ClientProvidedName"];
+
+var queuesSection = builder.Configuration.GetSection("RabbitMQ:Queues");
+
+string TARGETS_TARGETS_QUEUE = queuesSection["TargetsTargets"];
+string TARGETS_FLIGHT_BEGIN_QUEUE = queuesSection["TargetsFlightBegin"];
+string TARGETS_FLIGHT_END_QUEUE = queuesSection["TargetsFlightEnd"];
+
 
 IConnection conn = await factory.CreateConnectionAsync();
 IChannel channel = await conn.CreateChannelAsync();
 
-const string TARGETS_TARGETS_QUEUE = "Targets_Targets";
-const string TARGETS_FLIGHT_BEGIN_QUEUE = "Targets_Flight_Begin";
-const string TARGETS_FLIGHT_END_QUEUE = "Targets_Flight_End";
-const string BUCKET_NAME = "droneimages";
-const string MINIO_URI = "http://localhost:9000";
+string BUCKET_NAME = configuration["Minio:BucketName"];
+string MINIO_URI = configuration["Minio:MinioUri"];
+string MINIO_SERVER = configuration["Minio:Server"];
+string MINIO_LOGIN = configuration["Minio:Login"];
+string MINIO_PASSWORD = configuration["Minio:Password"];
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -44,8 +53,8 @@ builder.Services.AddDbContext<MagisterkaContext>(options =>
 builder.Services.AddSingleton<IMinioClient>(serviceProvider =>
 {
     return new MinioClient()
-        .WithEndpoint("localhost:9000")
-        .WithCredentials("minio", "minio123")
+        .WithEndpoint(MINIO_SERVER)
+        .WithCredentials(MINIO_LOGIN, MINIO_PASSWORD)
         .WithSSL(false) 
         .Build();
 });

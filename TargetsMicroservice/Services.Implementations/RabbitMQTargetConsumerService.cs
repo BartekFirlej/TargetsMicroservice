@@ -33,8 +33,9 @@ namespace TargetsMicroservice.Services.Implementations
                         var _targetService = scope.ServiceProvider.GetRequiredService<ITargetsService>();
                         var body = ea.Body.ToArray();
                         var message = Encoding.UTF8.GetString(body);
-                        Console.WriteLine($"Queue {_TARGETS_TARGETS_QUEUE}: {message}");
+                        Console.WriteLine($"Queue {_TARGETS_TARGETS_QUEUE}: ");
                         TargetRequest targetRequest = JsonSerializer.Deserialize<TargetRequest>(message);
+                        Console.WriteLine("DZIALA1");
                         await _targetService.AddTarget(targetRequest);
                         await Task.Delay(100);
                     }
