@@ -22,11 +22,11 @@ namespace TargetsMicroservice.Controllers
             return Ok(targets);
         }
 
-        [HttpPost]
+        /*[HttpPost]
         public async Task<IActionResult> PostTarget(TargetRequest request)
         {
             var target = await _targetService.AddTarget(request);
             return CreatedAtAction(nameof(PostTarget),target);
-        }
+        }*/
     }
 }
